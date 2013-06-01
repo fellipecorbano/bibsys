@@ -87,15 +87,19 @@ public class TrayIco {
         
         trayIcon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,
-                        "Running BIBSYS App (left click)");
+                //JOptionPane.showMessageDialog(null,
+                //        "Running BIBSYS App (left click)");
+                FrameInicial frame = new FrameInicial();
+                frame.setVisible(true);
             }
         });
         
         startSys.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,
-                        "Running BIBSYS App (right click)");
+                //JOptionPane.showMessageDialog(null,
+                //        "Running BIBSYS App (right click)");
+                FrameInicial frame = new FrameInicial();
+                frame.setVisible(true);
             }
         });
         
