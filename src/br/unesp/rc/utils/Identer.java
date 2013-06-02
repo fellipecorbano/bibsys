@@ -14,10 +14,12 @@ public class Identer {
     private static String[] blocks;
     private static String r;
     private static String sBufferOut = "";
-    
+    private static StringTokenizer stk;
+            
     private Identer() {
     }
- 
+    
+    /* Versão com stringSplit
     public static StringBuffer run(StringBuffer texto){
         
         blocks = getBlocks(texto);
@@ -30,48 +32,128 @@ public class Identer {
                 
         return new StringBuffer(sBufferOut);
     }
+    */
+    
+    public static StringBuffer run(StringBuffer texto){
+        
+        blocks = getBlocks(texto);
+        
+        for (String block : blocks){
+            if(!block.equals("")){
+                //sBufferOut = sBufferOut.concat(formatar(block));  
+                sBufferOut = sBufferOut + formatar(block);
+            }
+        }       
+                
+        return new StringBuffer(sBufferOut);
+    }
+    
+     public static String[] getBlocks(StringBuffer in){
+        String sBufferString = in.toString();
+        
+        return sBufferString.split("(?=[@])");        
+    }
+     
     /*
      * Método que invoca os métodos auxiliares
      */
     public static String formatar(String in){
         String out;
         
-        out = removerEspacos(in);
+        out = substituirAspas(in);
+        out = quebrarLinhas(out);
+        //out = removerEspacos(out);
         
         return out;
     }
     
     /*
      * Métodos Auxiliares
-     */
-    public static String[] getBlocks(StringBuffer in){
-        String sBufferString = in.toString();
-        
-        return sBufferString.split("(?=[@])");        
-    }
-    
-    /* 1. Todos as referências do arquivo deve ter tags internas em linhas 
-     * diferentes; 
-     */
-    
-    /* 2. Todas os valores das tags devem ser envolvidas por {}. Subistituir 
+     */    
+    /* 
+     * 1. Todas os valores das tags devem ser envolvidas por {}. Substituir 
      * as "" por {} se necessário;
      */
-    
-    /* 3.1. Antes das tags deve existir dois espaços em branco; */
-    public static String removerEspacos(String in){
-        return in.replace(",\n", ",\n  ");        
+    public static String substituirAspas(String in){
+        String out = "";
+        String nToken;
+        boolean flag = false;
+        
+        stk = new StringTokenizer(in, "\"", true);        
+        
+        while(stk.hasMoreTokens()){
+            nToken = stk.nextToken();
+            if(nToken.equals("\"")){
+                if(!flag){
+                    out = out + "{";
+                    flag = true;
+                }else{
+                    out = out + "}";
+                    flag = false;
+                }
+            }else{
+                out = out + nToken;
+            }
+        }
+               
+        return out;
     }
     
-    /* 3.2. Até o sinal de (=) deve existir 16 caracteres. Preencher as tags 
+    /* 
+     * 2. Todos as referências do arquivo deve ter tags internas em linhas 
+     * diferentes; 
+     * 
+     * 3.1. Antes das tags deve existir dois espaços em branco; 
+     */
+    public static String quebrarLinhas(String in){
+        String out;
+        int i=0;
+        
+        // Quebra a primeira linha pois não obedece a regra padrão
+        String[] blockParts = in.split("(?<=,)",2);
+        
+        // Quebra as linhas restantes
+        String[] lines = blockParts[1].split("(?<=},)\n*");
+        
+        out = blockParts[0].trim() + "\n";
+        for(String line : lines){
+            
+            if(i!=(lines.length-1)){
+                out = out + padronizarLinha(line,false);
+            }else{
+                out = out + padronizarLinha(line,true);
+            }                        
+            
+            i++;
+        }
+                
+        return out;       
+    }   
+    
+    
+    /* 
+     * 3.2. Até o sinal de (=) deve existir 16 caracteres. Preencher as tags 
      * com espaço em branco
-     */
-    
-    /* 3.3. Entre o sinal de (=) e a ({) deve existir apenas um espaço em 
+     * 
+     * 3.3. Entre o sinal de (=) e a ({) deve existir apenas um espaço em 
      * branco
-     */
-    
-    /* 3.4. O valor da tag deve estar entre chaves e sem espaços em branco 
+     * 
+     * 3.4. O valor da tag deve estar entre chaves e sem espaços em branco 
      * no início e no fim. Exemplo: {valor dessa tag}
      */
+    public static String padronizarLinha(String line, boolean lastLine){
+        line = line.trim();
+        
+        if(!lastLine){
+            String[] lineParts = line.split("[={}]");
+        
+            String chave = String.format("%1$-16s",lineParts[0]);         
+            String valor = lineParts[2].trim();
+        
+            return "  " + chave + "= {" + valor + "},\n";
+        }else{
+            return line + "\n\n";
+        }
+    }
+       
 }
