@@ -19,7 +19,9 @@ public class FileManager {
     public static boolean salvar(String path, StringBuffer buf) {
         boolean b = false;
         try {
-            File file = new File(path);
+            //File file = new File(path);
+            // PARA TESTES
+            File file = new File(path.replace(".bib", "") + "_output.bib");
             if (!file.exists()) {
                 file.createNewFile();
             }

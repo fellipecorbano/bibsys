@@ -17,7 +17,7 @@ public class BibSys {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Splash teste = new Splash();
+        //Splash teste = new Splash();
         
         TrayIco teste2 = new TrayIco();
         teste2.run();

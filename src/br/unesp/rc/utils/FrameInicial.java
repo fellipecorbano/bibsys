@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
  * @author Corbano
  */
 public class FrameInicial extends javax.swing.JFrame {
+    private StringBuffer identedFile;
 
     /**
      * Creates new form FrameInicial
@@ -92,29 +93,34 @@ public class FrameInicial extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //FrameFCteste fcf = new FrameFCteste();
-        
+
         //fcf.setVisible(true);
-              
+
         JFileChooser chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(true);
         int option = chooser.showOpenDialog(FrameInicial.this);
         if (option == JFileChooser.APPROVE_OPTION) {
-          File[] sf = chooser.getSelectedFiles();
-          String filelist = "nothing";
-          if (sf.length > 0) filelist = sf[0].getAbsolutePath();
-          for (int i = 1; i < sf.length; i++) {
-            filelist += ", " + sf[i].getName();
-          }
-          jLabel1.setText("You chose " + filelist);
-          FileManager.leitura(filelist);
-          
+            File[] sf = chooser.getSelectedFiles();
+            String filelist = "nothing";
+            if (sf.length > 0) {
+                filelist = sf[0].getAbsolutePath();
+            }
+            for (int i = 1; i < sf.length; i++) {
+                filelist += ", " + sf[i].getName();
+            }
+            jLabel1.setText("You chose " + filelist);
+            
+            StringBuffer texto = FileManager.leitura(filelist);
+
+            identedFile = Identer.run(texto);
+            
+            FileManager.salvar(filelist, identedFile);
+        } else {
+            jLabel1.setText("You canceled.");
         }
-        else {
-          jLabel1.setText("You canceled.");
-        }
-      
-        
-        
+
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
