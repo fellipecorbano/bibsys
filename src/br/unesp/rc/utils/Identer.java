@@ -12,35 +12,18 @@ import java.util.StringTokenizer;
  */
 public class Identer {
     private static String[] blocks;
-    private static String r;
     private static String sBufferOut = "";
     private static StringTokenizer stk;
             
     private Identer() {
     }
     
-    /* Versão com stringSplit
-    public static StringBuffer run(StringBuffer texto){
-        
-        blocks = getBlocks(texto);
-                
-        for (String block : blocks){
-            if(!block.equals("")){
-                sBufferOut = sBufferOut.concat(formatar(block));                
-            }
-        }
-                
-        return new StringBuffer(sBufferOut);
-    }
-    */
-    
     public static StringBuffer run(StringBuffer texto){
         
         blocks = getBlocks(texto);
         
         for (String block : blocks){
             if(!block.equals("")){
-                //sBufferOut = sBufferOut.concat(formatar(block));  
                 sBufferOut = sBufferOut + formatar(block);
             }
         }       
@@ -111,22 +94,27 @@ public class Identer {
         
         // Quebra a primeira linha pois não obedece a regra padrão
         String[] blockParts = in.split("(?<=,)",2);
-        
+                
         // Quebra as linhas restantes
-        String[] lines = blockParts[1].split("(?<=},)\n*");
+        String[] lines = blockParts[1].trim().split("(?<=}),?");
         
-        out = blockParts[0].trim() + "\n";
+        out = padronizarPrimeiraLinha(blockParts[0]);
         for(String line : lines){
             
             if(i!=(lines.length-1)){
                 out = out + padronizarLinha(line,false);
+                
+                if(i==lines.length-2){
+                    out = out.substring(0, out.length()-2) + "\n";
+                }
+                
             }else{
                 out = out + padronizarLinha(line,true);
             }                        
             
             i++;
         }
-                
+               
         return out;       
     }   
     
@@ -148,12 +136,39 @@ public class Identer {
             String[] lineParts = line.split("[={}]");
         
             String chave = String.format("%1$-16s",lineParts[0]);         
-            String valor = lineParts[2].trim();
+            String valor = lineParts[lineParts.length-1].trim();
         
             return "  " + chave + "= {" + valor + "},\n";
         }else{
             return line + "\n\n";
         }
+    }
+    
+    public static String padronizarPrimeiraLinha(String line){
+        String out = "";
+        boolean upperFlag = false;
+        boolean firstNumFlag = false;
+        
+        char[] letras = line.toCharArray();
+        
+        for(char l : letras){
+            if(l == '{'){
+                upperFlag = true;                
+            }
+            
+            if(upperFlag){
+                if(!firstNumFlag && Character.isDigit(l)){
+                    firstNumFlag = true;
+                    out = out + ":" + l;
+                }else{
+                    out = out + l;
+                }                
+            }else{
+                out = out + Character.toUpperCase(l);
+            }
+        }
+        
+        return out + "\n";
     }
        
 }

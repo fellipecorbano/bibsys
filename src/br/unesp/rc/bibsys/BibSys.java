@@ -22,17 +22,17 @@ public class BibSys {
      */
     public static void main(String[] args) {
         // Descomentar para funciona splash screen e icon tray
-        //Splash teste = new Splash();
+        Splash teste = new Splash();
         
-        //TrayIco teste2 = new TrayIco();
-        //teste2.run();
+        TrayIco teste2 = new TrayIco();
+        teste2.run();
         
         
         // SOMENTE PARA TESTES
-        StringBuffer texto = FileManager.leitura("C:\\Users\\Corbano\\Desktop\\exemplo.bib");
+        //StringBuffer texto = FileManager.leitura("C:\\Users\\Corbano\\Desktop\\exemplo.bib");
 
-        identedFile = Identer.run(texto);
+        //identedFile = Identer.run(texto);
             
-        FileManager.salvar("C:\\Users\\Corbano\\Desktop\\exemplo.bib", identedFile);
+        //FileManager.salvar("C:\\Users\\Corbano\\Desktop\\exemplo.bib", identedFile);
     }
 }
