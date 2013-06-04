@@ -42,7 +42,7 @@ public class TrayIco {
         }
         final PopupMenu popup = new PopupMenu();
         final TrayIcon trayIcon =
-                new TrayIcon(createImage("../../images/bulb.gif", "tray icon"));
+                new TrayIcon(createImage("../../images/icon.png", "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
         
         // Create a popup menu components

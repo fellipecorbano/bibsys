@@ -12,12 +12,12 @@ import java.awt.event.*;
  */
 public class Splash extends Frame implements ActionListener {
     static void renderSplashFrame(Graphics2D g, int frame) {
-        final String[] comps = {"foo", "bar", "baz"};
+        final String[] comps = {".", "..", "..."};
         g.setComposite(AlphaComposite.Clear);
-        g.fillRect(120,140,100,250);
+        g.fillRect(120,140,300,250);
         g.setPaintMode();
-        g.setColor(Color.WHITE);
-        g.drawString("Loading "+comps[(frame/5)%3]+"...", 120, 300);
+        g.setColor(Color.BLUE);
+        g.drawString("Loading "+comps[(frame/5)%3], 340, 190);
     }
     public Splash() {
         final SplashScreen splash = SplashScreen.getSplashScreen();
