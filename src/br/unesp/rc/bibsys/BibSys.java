@@ -14,25 +14,26 @@ import br.unesp.rc.utils.TrayIco;
  * @author Corbano
  */
 public class BibSys {
-    private static StringBuffer identedFile;
-    private static String filelist;
+    //private static StringBuffer identedFile;
+    //private static String filelist;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // Descomentar para funciona splash screen e icon tray
-        Splash teste = new Splash();
+        // Inicializar SplashScreen
+            Splash splashScreen = new Splash();
         
-        TrayIco teste2 = new TrayIco();
-        teste2.run();
+        // Inicializar Tray Icon
+        TrayIco tray = new TrayIco();
+        tray.run();
         
         
-        // SOMENTE PARA TESTES
-        //StringBuffer texto = FileManager.leitura("C:\\Users\\Corbano\\Desktop\\exemplo.bib");
-
-        //identedFile = Identer.run(texto);
-            
-        //FileManager.salvar("C:\\Users\\Corbano\\Desktop\\exemplo.bib", identedFile);
+        /* SOMENTE PARA TESTES (REMOVER)
+        
+        StringBuffer texto = FileManager.leitura("C:\\Users\\Corbano\\Desktop\\exemplo.bib");
+        identedFile = Identer.run(texto);
+        FileManager.salvar("C:\\Users\\Corbano\\Desktop\\exemplo.bib", identedFile);
+        */
     }
 }
