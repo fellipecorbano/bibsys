@@ -41,8 +41,6 @@ public class Splash extends Frame implements ActionListener {
         }
         splash.close();  
         
-        
-        
         /***************************************/
         /* Primeira janela */
          //super("SplashScreen demo");
@@ -61,7 +59,7 @@ public class Splash extends Frame implements ActionListener {
         mb.add(m1);
         setVisible(true);
         toFront();
-        * */
+        */
         /***************************************/
     }
     public void actionPerformed(ActionEvent ae) {

@@ -7,6 +7,7 @@ package br.unesp.rc.utils;
 import java.awt.SystemTray;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -62,7 +63,7 @@ public class FrameInicial extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("File Path...");
+        jLabel1.setText("...");
         jLabel1.setToolTipText("");
 
         label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -71,7 +72,7 @@ public class FrameInicial extends javax.swing.JFrame {
         label2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         label2.setText("Output:");
 
-        jLabel2.setText("File Path...");
+        jLabel2.setText("...");
         jLabel2.setToolTipText("");
 
         jMenu3.setText("Sistema");
@@ -87,6 +88,11 @@ public class FrameInicial extends javax.swing.JFrame {
         jMenuBar2.add(jMenu3);
 
         jMenu5.setText("About");
+        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu5MouseClicked(evt);
+            }
+        });
         jMenuBar2.add(jMenu5);
 
         setJMenuBar(jMenuBar2);
@@ -157,25 +163,38 @@ public class FrameInicial extends javax.swing.JFrame {
             for (int i = 1; i < sf.length; i++) {
                 filelist += ", " + sf[i].getName();
             }
-            jLabel1.setText("You chose " + filelist);
+            jLabel1.setText(filelist);
             
             StringBuffer texto = FileManager.leitura(filelist);
 
             identedFile = Identer.run(texto);
             
-            FileManager.salvar(filelist, identedFile);
-        } else {
+            if(FileManager.salvar(filelist, identedFile)){
+                jLabel2.setText(filelist.replace(".bib", "") + "_output.bib");
+            }else{
+                jLabel2.setText("Erro ao tentar salvar o arquivo.");
+            }
+            
+        } 
+        /*else {
             jLabel1.setText("You canceled.");
         }
-
-
-
+        * */
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+        JOptionPane.showMessageDialog(null,
+                        "BibSys File Identer (versão 1.0)\n"
+                        + "Formatador/Identador de arquivos BibTEX\n\n"
+                        + "Desenvolvido por:\n"
+                        + "Fellipe C. Corbano (fellipecorbano@gmail.com)\n"
+                        + "Daniel F. Lucas (danielfelipelucas@gmail.com)\n\n");
+    }//GEN-LAST:event_jMenu5MouseClicked
 
     /**
      * @param args the command line arguments

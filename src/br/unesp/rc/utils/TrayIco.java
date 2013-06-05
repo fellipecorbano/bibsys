@@ -6,14 +6,18 @@ package br.unesp.rc.utils;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
+import java.nio.file.Path;
 import javax.swing.*;
 
 public class TrayIco {
+    
+    private static FrameInicial frame;
+    
     public void run() {
         /* Use an appropriate Look and Feel */
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");            
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {
@@ -38,11 +42,12 @@ public class TrayIco {
         //Check the SystemTray support
         if (!SystemTray.isSupported()) {
             System.out.println("SystemTray is not supported");
+            JOptionPane.showMessageDialog(null,"Systray not supported");
             return;
         }
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon =
-                new TrayIcon(createImage("../../images/icon.png", "tray icon"));
+        //final TrayIcon trayIcon = new TrayIcon(createImage("../../images/icon.png", "tray icon"));
+        final TrayIcon trayIcon = new TrayIcon(createImage("images/icon.png", "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
         
         // Create a popup menu components
@@ -78,10 +83,15 @@ public class TrayIco {
             
             // Show message
             trayIcon.displayMessage("BibSys v1.0",
-                          "O BibSys foi minimizado para a bandeja", TrayIcon.MessageType.INFO);                
+                "O BibSys foi minimizado para a bandeja", 
+                TrayIcon.MessageType.INFO); 
+            
+            frame = new FrameInicial();
+            frame.setVisible(false);
             
         } catch (AWTException e) {
             System.out.println("TrayIcon could not be added.");
+            JOptionPane.showMessageDialog(null,"Tray icon cannot be added");
             return;
         }
         
@@ -89,7 +99,6 @@ public class TrayIco {
             public void actionPerformed(ActionEvent e) {
                 //JOptionPane.showMessageDialog(null,
                 //        "Running BIBSYS App (left click)");
-                FrameInicial frame = new FrameInicial();
                 frame.setVisible(true);
             }
         });
@@ -98,7 +107,6 @@ public class TrayIco {
             public void actionPerformed(ActionEvent e) {
                 //JOptionPane.showMessageDialog(null,
                 //        "Running BIBSYS App (right click)");
-                FrameInicial frame = new FrameInicial();
                 frame.setVisible(true);
             }
         });
@@ -106,7 +114,11 @@ public class TrayIco {
         aboutItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,
-                        "About Text");
+                        "BibSys File Identer (versão 1.0)\n"
+                        + "Formatador/Identador de arquivos BibTEX\n\n"
+                        + "Desenvolvido por:\n"
+                        + "Fellipe C. Corbano (fellipecorbano@gmail.com)\n"
+                        + "Daniel F. Lucas (danielfelipelucas@gmail.com)\n\n");
             }
         });
         
@@ -177,8 +189,19 @@ public class TrayIco {
     }
     
     //Obtain the image URL
-    protected static Image createImage(String path, String description) {
+    protected static Image createImageLocal(String path, String description) {
         URL imageURL = TrayIcon.class.getResource(path);
+        
+        if (imageURL == null) {
+            System.err.println("Resource not found: " + path);
+            return null;
+        } else {
+            return (new ImageIcon(imageURL, description)).getImage();
+        }
+    }
+    
+    protected static Image createImage(String path, String description) {
+        URL imageURL = ClassLoader.getSystemResource(path);
         
         if (imageURL == null) {
             System.err.println("Resource not found: " + path);
